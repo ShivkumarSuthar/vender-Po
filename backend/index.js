@@ -36,8 +36,8 @@ const docList = require("./routes/PoItemDoc/docList");
 // Middleware
 
 app.use(cors({
-    origin: ["https://vender-po.vercel.app/"],
-    methods: ["POST", "GET"],
+    origin:"*",
+    methods: ["POST", "GET", "DELETE", "PATCH","PUT"],
     credentials: true
 }
 ));
