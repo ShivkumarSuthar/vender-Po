@@ -36,7 +36,7 @@ const docList = require("./routes/PoItemDoc/docList");
 // Middleware
 
 app.use(cors({
-    origin: ["https://deploy-mern-1whq.vefcel.app"],
+    origin: ["https://vender-po.vercel.app/"],
     methods: ["POST", "GET"],
     credentials: true
 }
