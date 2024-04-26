@@ -8,10 +8,10 @@ user.use(express.urlencoded({ extended: true }));
 
 // Login route (POST request)
 user.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+    const { userId, password } = req.body;
 
     try {
-        const user = await userModel.findOne({ userName: username });
+        const user = await userModel.findOne({ userId: userId });
 
         if (user) {
             if (user.password === password) {

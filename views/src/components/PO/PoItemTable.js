@@ -1,102 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React  from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
-import axios from "axios";
 
-function PoItemTable({ isSubmit, PoId, userName }) {
-  const [poItemData, setPoItemData] = useState([
-    {
-      itemCode: "",
-      itemName: "",
-      purchaseQty: "",
-      paymentTerm: "",
-      incoTerm: "",
-      basicPrice: "",
-      tax: "",
-      amount: "", 
-      deliveryDate: "12-1-15",
-      PO_id: PoId,
-      createdBy: userName
-    },
-  ]);
-
-  const handlePurchaseQtyChange = (index, value) => {
-    const updatedPoItemData = [...poItemData];
-    updatedPoItemData[index].purchaseQty = value;
-    if (value && updatedPoItemData[index].basicPrice) {
-      updatedPoItemData[index].amount = (parseFloat(value) * parseFloat(updatedPoItemData[index].basicPrice)).toFixed(2);
-    } else {
-      updatedPoItemData[index].amount = updatedPoItemData[index].basicPrice;
-    }
-    setPoItemData(updatedPoItemData);
-  };
-  
-  const handleBasicPriceChange = (index, value) => {
-    const updatedPoItemData = [...poItemData];
-    updatedPoItemData[index].basicPrice = value;
-    if (value && updatedPoItemData[index].purchaseQty) {
-      updatedPoItemData[index].amount = (parseFloat(value) * parseFloat(updatedPoItemData[index].purchaseQty)).toFixed(2);
-    } else {
-      updatedPoItemData[index].amount = value;
-    }
-    setPoItemData(updatedPoItemData);
-  };
-  
-
-  const [newOrder, setNewOrder] = useState({
-    itemCode: "",
-    itemName: "",
-    purchaseQty: "",
-    paymentTerm: "",
-    incoTerm: "",
-    basicPrice: "",
-    tax: "",
-    amount: "",
-    deliveryDate: "",
-    PO_id: PoId,
-    createdBy: userName
-  });
-
-  useEffect(() => {
-    if (isSubmit) {
-      const handleSubmit = async () => {
-        try {
-          for (let i = 0; i < poItemData.length; i++) {
-            const itemData = {
-              ...poItemData[i],
-              PO_id: PoId,
-              createdBy: userName
-            };
-
-            const response = await axios.post(
-              "http://localhost:8000/api/poItems/add",
-              itemData
-            );
-            console.log("Response:", response.data);
-          }
-        } catch (error) {
-          console.error("Error occurred while submitting data:", error);
-        }
-      };
-      handleSubmit();
-    }
-  }, [isSubmit]);
-
-  const handleChange = (e, fieldName, index) => {
-    const { value } = e.target;
-    const updatedData = [...poItemData];
-    updatedData[index] = { ...updatedData[index], [fieldName]: value };
-    setPoItemData(updatedData);
-  };
-
-  const handleAddRow = () => {
-    setPoItemData([...poItemData, newOrder]);
-  };
-
-  const handleDeleteRow = (index) => {
-    const updatedData = [...poItemData];
-    updatedData.splice(index, 1);
-    setPoItemData(updatedData);
-  };
+function PoItemTable({ isSubmit, PoId, userName,poItemData, handlePoItemDeleteRow, handlePoItemAddRow, handlePoItemChange,handleBasicPriceChange,handlePurchaseQtyChange }) {
 
   return (
     <section className="w-full">
@@ -150,7 +55,7 @@ function PoItemTable({ isSubmit, PoId, userName }) {
                   className="w-full h-full border-none"
                   type="text"
                   value={item.itemCode}
-                  onChange={(e) => handleChange(e, "itemCode", index)}
+                  onChange={(e) => handlePoItemChange(e, "itemCode", index)}
                 />
               </td>
               <td className="text-center p-1 border-none h-[40px] text-wrap">
@@ -158,7 +63,7 @@ function PoItemTable({ isSubmit, PoId, userName }) {
                   className="w-full h-full text-wrap"
                   type="text"
                   value={item.itemName}
-                  onChange={(e) => handleChange(e, "itemName", index)}
+                  onChange={(e) => handlePoItemChange(e, "itemName", index)}
                 />
               </td>
               <td className="text-center p-1 border-none h-[40px]">
@@ -174,7 +79,7 @@ function PoItemTable({ isSubmit, PoId, userName }) {
                   className="w-full h-full"
                   type="text"
                   value={item.paymentTerm}
-                  onChange={(e) => handleChange(e, "paymentTerm", index)}
+                  onChange={(e) => handlePoItemChange(e, "paymentTerm", index)}
                 />
               </td>
               <td className="text-center p-1 border-none h-[40px]">
@@ -182,7 +87,7 @@ function PoItemTable({ isSubmit, PoId, userName }) {
                   className="w-full h-full"
                   type="text"
                   value={item.incoTerm}
-                  onChange={(e) => handleChange(e, "incoTerm", index)}
+                  onChange={(e) => handlePoItemChange(e, "incoTerm", index)}
                 />
               </td>
               <td className="text-center p-1 border-none h-[40px]">
@@ -196,7 +101,7 @@ function PoItemTable({ isSubmit, PoId, userName }) {
               <td className="text-center p-1 border-none h-[40px]">
                 <select
                   className="input"
-                  onChange={(e) => handleChange(e, "tax", index)}
+                  onChange={(e) => handlePoItemChange(e, "tax", index)}
                 >
                   <option value="" disabled selected hidden>
                     select Tax
@@ -219,14 +124,14 @@ function PoItemTable({ isSubmit, PoId, userName }) {
                   className="w-full h-full text-[10px]"
                   type="date"
                   value={item.deliveryDate}
-                  onChange={(e) => handleChange(e, "deliveryDate", index)}
+                  onChange={(e) => handlePoItemChange(e, "deliveryDate", index)}
                 />
               </td>
-              <td className="flex justify-end items-center px-2 border-none py-2">
+              <td className="flex justify-end items-center px-2 border-none py-2 h-full">
                 {poItemData.length > 1 && (
                   <button
                     type="button"
-                    onClick={() => handleDeleteRow(index)}
+                    onClick={() => handlePoItemDeleteRow(index)}
                     className="px-2 py-1 bg-red-500 text-white text-[10px] h-[25px] "
                   >
                     <FaTrash />
@@ -235,7 +140,7 @@ function PoItemTable({ isSubmit, PoId, userName }) {
 
                 <button
                   type="button"
-                  onClick={handleAddRow}
+                  onClick={handlePoItemAddRow}
                   className="ml-1 px-2 text-white bg-green-600 text-[12px] h-[25px]"
                 >
                   <FaPlus />

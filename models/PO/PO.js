@@ -17,8 +17,8 @@ const PoData = Po.Schema({
     vender_code: {
         type: String
     },
-    vender_name:{
-        type:String
+    vender_name: {
+        type: String
     },
 
     remark: {
@@ -87,11 +87,14 @@ const PoData = Po.Schema({
         default: "-"
     },
 
-
     PO_status: {
         type: String,
         default: "-"
 
+    },
+
+    term_Condition: {
+        type: String,
     },
 
     Final_Approved_at: {
@@ -110,9 +113,18 @@ const PoData = Po.Schema({
         type: String,
         default: "-"
     },
-    Updated_by:{
-        type:String,
-        default:"-"
+    Updated_by: {
+        type: String,
+        default: "-"
+    },
+    UppdatedByHOD:{
+        type:String
+    },
+    UppdatedBybuyer:{
+        type:String
+    }
+    ,UppdatedByMD:{
+        type:String
     }
 });
 

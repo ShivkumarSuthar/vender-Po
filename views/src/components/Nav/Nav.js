@@ -1,15 +1,15 @@
 import React from "react";
 
 import { FaUserTie } from "react-icons/fa";
-import { FaBarsStaggered } from "react-icons/fa6";
+// import { FaBarsStaggered } from "react-icons/fa6";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { IoIosPeople } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 
 function Nav({ closeNav, isOpen,user }) {
-  const handleCloseNav = () => {
-    closeNav(!isOpen);
-  };
+  // const handleCloseNav = () => {
+  //   closeNav(!isOpen);
+  // };
 
   return (
     <section className="h-screen w-100">

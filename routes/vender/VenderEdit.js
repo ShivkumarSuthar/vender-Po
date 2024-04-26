@@ -6,11 +6,11 @@ const venderModel = require("../../models/vender/vender")
 const venderEdit = express.Router();
 
 // API endpoint for updating vendor details by ID
-venderEdit.put("/edit/:_id", async (req, res) => {
+venderEdit.put("/edit/:Vender_code", async (req, res) => {
     try {
-        const vender_id = req.params._id;
+        const vender_id = req.params.Vender_code;
         // Find the vendor by ID
-        const vender = await venderModel.findById(vender_id);
+        const vender = await venderModel.findOne({Vender_code:req.params.Vender_code});
 
         if (!vender) {
             return res.status(404).send("Vendor not found");

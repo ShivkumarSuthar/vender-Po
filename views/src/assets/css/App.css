@@ -25,3 +25,10 @@
 .table-data:nth-child(even){
   background-color:rgb(219, 222, 228) ;
 }
+
+.data-model{
+  background: rgba(128, 128, 128, 0.089);
+}
+.data-model:nth-child(even){
+  background-color: rgba(128, 128, 128, 0.158);
+}

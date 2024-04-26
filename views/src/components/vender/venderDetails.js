@@ -4,7 +4,6 @@ import moment from "moment"
 function VenderDetails({vender_Data}) {
 
   const currentDate = moment().format('DD-MM-YYYY');
-  // const currentTime = moment().format('HH:mm:ss');
   const today = currentDate;
   return (
     <section className="w-full">

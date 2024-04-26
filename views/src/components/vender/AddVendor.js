@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
-import postService from "../../postService";
 import { IoMdClose } from "react-icons/io";
+import baseUrl from "../../config";
 
 function AddVendor({ onSubmit, addClose,userName }) {
   const [name, setName] = useState("");
@@ -88,7 +88,7 @@ const handleSubmit = async (e) => {
     };
 
     // Send POST request using axios
-    const response = await axios.post("http://localhost:8000/api/vender/add", formData);
+    const response = await axios.post(`${baseUrl}/api/vender/add`, formData);
     
     console.log(response);
     alert("Added successfully!");
@@ -135,7 +135,7 @@ const handleSubmit = async (e) => {
               type="text"
               value={name}
               className="input w-[293px] ml-0 m-2"
-              placeholder="Vendor Name"
+              placeholder="Vender Name"
               onChange={(e) => setName(e.target.value)}
             />
             <input
@@ -151,10 +151,10 @@ const handleSubmit = async (e) => {
               onChange={(e) => setVendorType(e.target.value)}
             >
               <option value="" disabled selected hidden>
-                Vendor Type
+                Vender Type
               </option>
               <option value="Domestic">Domestic</option>
-              <option value="Regular">Regular</option>
+              <option value="International">International</option>
             </select>
           </div>
 
@@ -190,10 +190,11 @@ const handleSubmit = async (e) => {
               onChange={(e) => setVClassification(e.target.value)}
             >
               <option value="" disabled selected hidden>
-                Vendor Classification
+                Vender Classification
               </option>
               <option value="Micro">Micro</option>
-              <option value="Macro">Macro</option>
+              <option value="Small">Small</option>
+              <option value="Medium">Medium</option>
             </select>
           </div>
 

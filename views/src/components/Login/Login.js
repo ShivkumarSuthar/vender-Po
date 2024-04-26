@@ -3,9 +3,10 @@ import axios from 'axios';
 import React, { useRef, useState } from 'react';
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-
-const Login = ({ handleLoginSuccess, handleUser, levels }) => {
-    const [username, setUsername] = useState('');
+import { CiLogin } from "react-icons/ci";
+import baseUrl from "../../config";
+const Login = ({ handleLoginSuccess, handleUser, levels,userID }) => {
+    const [userId, setuserId] = useState('');
     const [password, setPassword] = useState('');
     const [show, setShow] = useState(false);
 
@@ -14,28 +15,29 @@ const Login = ({ handleLoginSuccess, handleUser, levels }) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const userData = { username, password }; // Pass data as an object
+        const userData = { userId, password }; // Pass data as an object
         try {
-            const response = await axios.post('http://localhost:8000/api/user/login', userData, {
+            const response = await axios.post(`${baseUrl}/api/user/login`, userData, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
             });
-    
+
             if (response.status === 200) {
                 console.log(response.data);
                 handleLoginSuccess();
                 // Do something upon successful login
                 alert("Welcome Back!, You have successfully Loged in.");
-                handleUser(username);
+                handleUser(response.data.user.name);
                 levels(response.data.user.levels);
+                userID(response.data.user.userId);
                 console.log(levels)
-                setUsername("");
+                setuserId("");
                 setPassword("");
             } else {
                 console.error(response.data.message); // Handle login error
                 alert("UserName or password are invalid!");
-                setUsername("");
+                setuserId("");
                 setPassword("");
             }
         } catch (error) {
@@ -43,7 +45,7 @@ const Login = ({ handleLoginSuccess, handleUser, levels }) => {
             alert("Internal Server Error!");
         }
     };
-    
+
     const handleClick = () => {
         setShow(!show)
         if (ref.current) {
@@ -69,8 +71,8 @@ const Login = ({ handleLoginSuccess, handleUser, levels }) => {
                             id="username"
                             className="input-field bg-slate-100"
                             placeholder='UserName'
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            value={userId}
+                            onChange={(e) => setuserId(e.target.value)}
                             required
                         />
                     </div>
@@ -91,7 +93,7 @@ const Login = ({ handleLoginSuccess, handleUser, levels }) => {
 
 
                     <div className="input-group">
-                        <button type='submit' className='button bg-blue-500 text-white hover:bg-slate-400'>Login <i className="fa-solid fa-arrow-right"></i></button>
+                        <button type='submit' className='button bg-blue-500 text-white hover:bg-slate-400 flex items-center justify-center'>Login <CiLogin /></button>
                     </div>
                 </form>
             </div>

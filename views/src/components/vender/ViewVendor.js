@@ -1,19 +1,19 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
+import baseUrl from "../../config";
 function ViewVendor({ vender_Id, closeView }) {
   const [data, setData] = useState({});
 
   useEffect(() => {
     const getService = async () => {
       const response = await axios.get(
-        `http://localhost:8000/api/vender/view/${vender_Id}`
+        `${baseUrl}/api/vender/view/${vender_Id}`
       );
-      console.log(response);
       setData(response.data);
     };
     getService();
-  }, []);
+  }, [vender_Id]);
 
 
   const HandleClose = () => {
@@ -42,6 +42,7 @@ function ViewVendor({ vender_Id, closeView }) {
             General Information
           </h1>
           <table className="flex w-full border-[1px] border-black">
+          
             <td className="flex flex-col w-[20%] text-wrap ">
               <th className="text-start px-2 py-1 text-[12px]  border-b-[1px] border-black border-r-[1px] ">Name :</th>
               <th className="text-start px-2 py-1 text-[12px] border-b-[1px] border-black border-r-[1px]">Address:</th>
@@ -50,8 +51,8 @@ function ViewVendor({ vender_Id, closeView }) {
               <th className="text-start px-2 py-1 text-[12px] border-b-[1px] border-black border-r-[1px] ">Contact Person Name:</th>
               <th className="text-start px-2 py-1 text-[12px] border-r-[1px] border-black">Contact Person Phone No:</th>
             </td>
-            <div className="flex flex-col w-[80%]"> 
-            
+            <div className="flex flex-col w-[80%]">
+
               <td className="px-2 py-1 text-[12px]  border-black border-b-[1px]">{data.Name}</td>
               <td className="px-2 py-1 text-[12px]  border-black border-b-[1px]">{data.Address}</td>
               <td className="flex w-full  border-black border-b-[1px]">
@@ -89,12 +90,12 @@ function ViewVendor({ vender_Id, closeView }) {
           Registration Information
         </h1>
         <table className="flex w-full  border-black border-[1px]" >
-          <div className="flex flex-col w-[20%] text-[12px] text-md">
+          <th className="flex flex-col w-[20%] text-[12px] text-md">
             <th className="text-start px-2 py-1 text-[12px]  border-black border-b-[1px] border-r-[1px]">GSTN Number :</th>
             <th className="text-start px-2 py-1 text-[12px] border-black border-b-[1px] border-r-[1px]">ECC No.:</th>
             <th className="text-start px-2 py-1 text-[12px] border-black border-b-[1px] border-r-[1px]">Tin No.</th>
             <th className="text-start px-2 py-1 text-[12px] border-black  border-r-[1px]">MSME No.</th>
-          </div>
+          </th>
           <div className="flex flex-col w-[80%]">
             <td className="flex text-start px-2 w-full text-[12px] border-black border-b-[1px] border-r-[0px]">
               <span className="w-[40%]  border-r-[1px] border-black py-1">{data.Contact_Person_Name}</span>
@@ -126,14 +127,14 @@ function ViewVendor({ vender_Id, closeView }) {
           Payment Information
         </h1>
         <table className="flex w-full text-[12px] border-[1px] border-black mt-1">
-          <div className="flex flex-col w-[20%]">
+          <th className="flex flex-col w-[20%]">
             <th className="px-2 text-start py-1 border-r-[1px] border-black border-b-[1px]">Payment Terms :</th>
             <th className="px-2 text-start py-1 border-r-[1px] border-black">Inco Terms</th>
-          </div>
-          <div className="flex flex-col w-[80%]">
+          </th>
+          <td className="flex flex-col w-[80%]">
             <td className="px-2 border-b-[1px] border-black py-1">{data.Payment_Terms}</td>
             <td className="px-2">{data.Inco_Terms}</td>
-          </div>
+          </td>
         </table>
       </div>
 
@@ -143,11 +144,11 @@ function ViewVendor({ vender_Id, closeView }) {
           Bank Information
         </h1>
         <table className="flex w-full text-[12px] border-black border-[1px]">
-          <div className="flex flex-col w-[20%] text-md">
+          <th className="flex flex-col w-[20%] text-md">
             <th className="text-start px-2 border-b-[1px] border-r-[1px] border-black py-1">Bank A/c No. :</th>
             <th className="text-start px-2 border-b-[1px] border-r-[1px] border-black py-1">Bank Branch</th>
             <th className="text-start px-2 py-1 border-r-[1px] border-black">Bank IFSC Code: </th>
-          </div>
+          </th>
           <div className="flex flex-col w-[80%]">
             <td className="flex border-black border-b-[1px]">
               <span className="w-[40%] px-2 py-1">{data.Bank_ACC_No}</span>

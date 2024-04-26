@@ -1,9 +1,9 @@
 const express = require("express");
-const userDetailsUpdate = express.Router(); // Change to Router() for better organization
-const userDetailsModel = require("../../models/user/organizationModel");
+const organization = express.Router(); // Change to Router() for better organization
+const organizationModel = require("../../models/user/organizationModel");
 const multer = require("multer");
 
-userDetailsUpdate.use(express.json());
+organization.use(express.json());
 
 
 
@@ -22,13 +22,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Route to update user details
-userDetailsUpdate.put("/update/:_id", upload.single("files"), async (req, res) => {
+organization.put("/update/:_id", upload.single("files"), async (req, res) => {
     const userId = req.params._id;
     const { address, GSTIN, CIN, PAN, updatedBy } = req.body; // Remove 'logo' from destructuring
 
     try {        
         // Find the user details by userId
-        let user = await userDetailsModel.findById(userId);
+        let user = await organizationModel.findById(userId);
 
         if (!user) {
             return res.status(404).json({ error: "organization Details not found" }); // Send error message as JSON
@@ -48,6 +48,7 @@ userDetailsUpdate.put("/update/:_id", upload.single("files"), async (req, res) =
         if (req.file) {
             user.logo = "http://localhost:8000/" + req.file.path; // Assuming 'path' contains the path to the uploaded file
         }
+        
 
         // Save the updated user details
         await user.save();
@@ -58,4 +59,4 @@ userDetailsUpdate.put("/update/:_id", upload.single("files"), async (req, res) =
     }
 });
 
-module.exports = userDetailsUpdate;
+module.exports = organization;

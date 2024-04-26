@@ -4,18 +4,19 @@ import PoViewTable from "./PoViewTable";
 import axios from "axios";
 import { IoMdClose } from "react-icons/io";
 import { AiFillPrinter } from "react-icons/ai";
+import baseUrl from "../../config";
 
 function PO({ onClick, PO_ID, onClose }) {
   const [combinedData, setCombinedData] = useState(null);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:8000/api/Po/Po_combined",
-          { PO_ID: PO_ID  }
+          `${baseUrl}/api/Po/Po_combined`,
+          { PO_ID: PO_ID }
         );
         setCombinedData(response.data);
+        console.log(response.data)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -23,15 +24,17 @@ function PO({ onClick, PO_ID, onClose }) {
     fetchData();
   }, [PO_ID]);
 
-  const Print = () => {     
-    let printContents = document.getElementById('print').innerHTML;
-    let originalContents = document.body.innerHTML;
-    document.body.innerHTML = printContents;
+  const printpage = () => {
+    const printContent = document.getElementById("print").innerHTML;
+    const originalContent = document.body.innerHTML;
+    document.body.innerHTML = printContent;
     window.print();
-    document.body.innerHTML = originalContents; 
-  }
+    document.body.innerHTML = originalContent;
+  };
+  
 
-  return (
+
+  return (  
     <section className="h-min-screen p-4 bg-white">
       {combinedData && (
         <>
@@ -51,7 +54,7 @@ function PO({ onClick, PO_ID, onClose }) {
                 vender_Data={combinedData.venderData}
                 organizationData={combinedData.organizationData}
                 invoice_address={
-                  combinedData.organizationData.Material_delivery_address
+                  combinedData.PoData.Material_delivery_address
                 }
               />
             </div>
@@ -64,7 +67,7 @@ function PO({ onClick, PO_ID, onClose }) {
               <PoViewTable
                 POId={PO_ID}
                 poData={combinedData.PoData}
-                vender_code={combinedData.organizationData.vender_code}
+                vender_code={combinedData.PoData.vender_code}
                 remark={combinedData.PoData.remark}
                 userData={combinedData.organizationData}
                 poItemData={combinedData.PoItemData}
@@ -74,7 +77,7 @@ function PO({ onClick, PO_ID, onClose }) {
               <button
                 title="print"
                 className="h-[35px] w-[80px] text-white text-[12px]  bg-gray-500 rounded-sm hover:bg-black   flex justify-center items-center"
-                onClick={Print}
+                onClick={printpage}
               >
                 <span className="  text-white  text-2xl text-center ">
                   <AiFillPrinter />

@@ -5,23 +5,20 @@ import ViewPO from "../PO/ViewPO";
 import PoEdit from "../PO/PoEdit";
 import AddPo from "../PO/AddPo";
 import moment from "moment";
-import { CiSearch } from "react-icons/ci";
-import { UserContext } from "../main/Home";
-import { UpdateLevels } from "../main/Home";
-function PoDashboard({ toggleMenu }) {
+import { UserContext } from "./Home";
+import { UpdateLevels } from "./Home";
+import baseUrl from "../../config";
+function PoDashboard() {
   const [data, setData] = useState([]);
   const [ViewPo, setViewPo] = useState(false);
   const [addNew, setAddNew] = useState(false);
-  const [selectedVendor, setSelectedVendor] = useState({});
-  const [editPo, seteditPo] = useState(false);
+const [editPo, seteditPo] = useState(false);
   const [Po_id, setPo_id] = useState("")
-  const [vender_id, setVender_Id] = useState("")
-  const userName = useContext(UserContext);
+  const [poData, setPoData] = useState([]);
+const userName = useContext(UserContext);
   const level = useContext(UpdateLevels)
-
-  const handleViewVendor = (ID) => {
-    setSelectedVendor(ID);
-    setPo_id(ID)
+const handleViewVendor = (ID) => {
+     setPo_id(ID)
     setViewPo(true);
   };
 
@@ -33,18 +30,13 @@ function PoDashboard({ toggleMenu }) {
 
 
 
-  const handleEditClose = () => {
-    seteditPo(false);
-  };
-  console.log(level)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/Po/PoList");
+        const response = await axios.get(`${baseUrl}/api/Po/PoList`);
         setData(response.data);
-        console.log(response.data)
-        setVender_Id(response.data.vender_id)
-      } catch (error) {
+        setPoData(response.data);
+        } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
@@ -52,15 +44,15 @@ function PoDashboard({ toggleMenu }) {
 
   }, []);
 
-  const handleCloseNav = () => {
-    toggleMenu();
-  };
-  const handleAddVendorSubmit = () => {
+const handleAddVendorSubmit = () => {
     setAddNew(false);
   };
   const handleAddClose = () => {
     setAddNew(false);
   };
+
+
+
 
   const handleBuyerStatus = async (_id) => {
     try {
@@ -76,8 +68,8 @@ function PoDashboard({ toggleMenu }) {
       );
       if (confirm) {
         const response = await axios.put(
-          `http://localhost:8000/api/Po/edit/${_id}`,
-          updatedData
+          `${baseUrl}/api/Po/updateAll/${_id}`,
+          {poData:updatedData}
         );
         console.log(response);
         alert("status updated successfully!");
@@ -94,7 +86,7 @@ function PoDashboard({ toggleMenu }) {
         const updatedData = {
           HOD_status: true,
           PO_status: "Pending from MD",
-          UppdatedByHODL:userName
+          UppdatedByHOD:userName
         };
 
         const confirm = window.confirm(
@@ -102,8 +94,8 @@ function PoDashboard({ toggleMenu }) {
         );
         if (confirm) {
           const response = await axios.put(
-            `http://localhost:8000/api/Po/edit/${id}`,
-            updatedData
+             `${baseUrl}/api/Po/updateAll/${id}`,
+          {poData:updatedData}
           );
           console.log(response);
           alert("status updated successfully!");
@@ -133,10 +125,10 @@ function PoDashboard({ toggleMenu }) {
       const confirm = window.confirm(
         "Are you sure, You want to change the status"
       );
-      if (confirm) {
+      if (confirm) {     
         const response = await axios.put(
-          `http://localhost:8000/api/Po/edit/${_id}`,
-          updatedData
+          `${baseUrl}/api/Po/updateAll/${_id}`,
+          {poData:updatedData}
         );
         console.log(response);
         alert("status updated successfully!");
@@ -147,16 +139,24 @@ function PoDashboard({ toggleMenu }) {
     }
   };
 
+
+  const handleVenderList = (selectedFilter) => {
+    if (selectedFilter !== "All") {
+      const limit = parseInt(selectedFilter);
+      const filteredData = data.slice(0, limit);
+      setPoData(filteredData);
+    } else {
+      setPoData(data);
+    }
+  };
   return ViewPo ? (
-    <ViewPO onClose={() => setViewPo(false)} PO_ID={Po_id} vender_id={vender_id} />
+    <ViewPO onClose={() => setViewPo(false)} PO_ID={Po_id} />
   ) : addNew ? (
     <AddPo onSubmit={handleAddVendorSubmit} addClose={handleAddClose} userName={userName} />
-  ) : editPo ? ( // Render edit form if editVendor state is true
+  ) : editPo ? ( 
     <PoEdit
       PoId={Po_id}
       onSubmit={() => seteditPo(false)}
-      // editClose={handleEditClose}
-      // addClose={handleEditClose} 
       userName={userName}
     />
   ) : (
@@ -165,16 +165,17 @@ function PoDashboard({ toggleMenu }) {
         <div className="h-[59.6px] flex justify-between px-2  items-center bg-white border-b-[1px] border-[#C8CBD9]">
           <div>
 
-            <fieldset className="bg-[#F1F2F7] w-[250px] h-[40px] flex justify-center items-center rounded-md">
-              <input
-                type="text"
-                className=" px-3 py-1 bg-none bg-[#F1F2F7] visited:outline-none search"     
-                placeholder="search"
-              />
-              <button>
-                <CiSearch />
-              </button>
-            </fieldset>
+          <div>
+          <span className="text-[12px]">Show</span>
+            <select onChange={(e) => handleVenderList(e.target.value)} className="border-black border-[1px] px-2 py-1 mx-2 text-[12px]">
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="All">All</option>
+            </select>
+            <span className="text-[12px]">Entries</span>
+          </div>
+
           </div>
           {(level !== "3") &&
             <div className="h-[40px] overflow-hidden">
@@ -233,22 +234,22 @@ function PoDashboard({ toggleMenu }) {
               </tr>
             </thead>
             <tbody className="text-sm px-2">
-              {data.map((item, index) => (
-                <tr key={index} className=" text-center border-none bg-gray-200 text-[12px] h-min-[35px]">
-                  <td className="border-none ">{index + 1}</td>
+              {poData.map((item, index) => (
+                <tr key={index} className="data-model text-center border-none  text-[12px] h-min-[35px]">
+                  <td className="border-none text-start px-2">{index + 1}</td>
                   <td className="border-none ">{item.Po_no}</td>
 
                   <td className="border-none">{item.DOC}</td>
                   <td className="border-none">{item.vender_name}</td>
                   <td className="border-none">
                     {item.buyyer_status ? (
-                      <span className="bg-green-500 px-2 py-1 text-white ">
+                      <span className="bg-green-500 px-2 py-1 text-black ">
                         Approved
                       </span>
                     ) : (
                       <button
                         onClick={() => handleBuyerStatus(item._id)} disabled={(level === "1") ? false : true}
-                        className="px-2 py-1 rounded-sm bg-blue-500 text-xs text-white"
+                        className="px-3  rounded-sm bg-blue-300 text-[12px] text-black"
                       >
                         Pending
                       </button>
@@ -257,14 +258,16 @@ function PoDashboard({ toggleMenu }) {
 
                   <td className="border-none">
                     {item.HOD_status ? (
-                      <span className="bg-green-500 px-2 py-1 text-white">Approved</span>
+                      <span className="bg-green-500 px-2 py-1 text-black ">
+                        Approved
+                      </span>
                     ) : (
                       !item.buyyer_status ? (
                         <span className="">-</span>
                       ) : (
                         <button
                           onClick={() => handleHODStatus(item)} disabled={(level === "2") ? false : true}
-                          className="px-2 py-1 rounded-sm bg-blue-500 text-xs text-white"
+                          className="px-3  rounded-sm bg-blue-300 text-[12px] text-black"
                         >
                           Pending
                         </button>
@@ -273,12 +276,12 @@ function PoDashboard({ toggleMenu }) {
                   </td>
                   <td className="border-none">
                     {item.MD_status ? (
-                      <span className="bg-green-500 px-2 py-1 text-white ">
+                      <span className="bg-green-500 px-2 py-1 text-black ">
                         Approved
                       </span>
                     ) : (!item.HOD_status ? (<span>-</span>) :
                       <button
-                        className="px-2 py-1 rounded-sm bg-blue-500 text-xs text-white"
+                        className="px-3  rounded-sm bg-blue-300 text-[12px] text-black"
                         onClick={() => handleMDStatus(item._id)} disabled={(level === "3") ? false : true}
                       >
                         Pending

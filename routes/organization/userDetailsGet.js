@@ -2,7 +2,7 @@ const express = require("express");
 const organizationDetails = express();
 const organizationModel = require("../../models/user/organizationModel");
 
-organizationDetails.post("/details", async (req, res) => {
+organizationDetails.get("/details", async (req, res) => {
    
         try {
             const organizationData = await organizationModel.find();

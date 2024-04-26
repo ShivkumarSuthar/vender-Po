@@ -28,15 +28,7 @@ const userDataSchema = new mongoose.Schema({
     logo: {
         type: String,
     },
-    buyerName:{
-        type:String
-    },
-    HODName:{
-   type:String
-    },
-    MDName:{
-        type:String
-    }
+
 
 });
 

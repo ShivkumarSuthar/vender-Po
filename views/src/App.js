@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import Login from './components/Login/Login';
 import "./assets/css/App.css"
 import Home from './components/main/Home';
-import PoItemTable from './components/PO/PoItemTable';
 
 const App = () => {
   const [userName, setUserName]=useState("")
   const [levels, setLevels]=useState("")
+  const [userID, setUserID] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
 
   const handleLoginSuccess = () => {
@@ -17,11 +17,14 @@ const App = () => {
   const handleUser=(e)=>{
 setUserName(e)
   }
+  const handleUserId=(e)=>{
+    setUserID(e)
+      }
   
   return (
    
       <div>
-      {isLoggedIn ? <Home user={userName} levels={levels}/> : <Login handleLoginSuccess={handleLoginSuccess} handleUser={handleUser} levels={(e)=>setLevels(e)}/>}
+      {isLoggedIn ? <Home user={userName} levels={levels} userID={userID} /> : <Login handleLoginSuccess={handleLoginSuccess} handleUser={handleUser} levels={(e)=>setLevels(e)} userID={handleUserId}/>}
       {/* <PoItemTable/> */}
       </div>
  

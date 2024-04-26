@@ -1,15 +1,16 @@
 import React from 'react'
 import VenderDetails from '../vender/venderDetails';
-import logo from "../../assets/images/images.jpg";
+import logo from "../../assets/images/images.png";
 
 function UserDetails({vender_Data,organizationData,invoice_address}) {
-   
+  console.log("organizationData")
+   console.log(organizationData)
   return (
     <section className='bg-white'>
-    
+    {organizationData.map((item,index)=>
         <div className="flex flex-col items-center w-100 "  >
-          <img src={logo} alt="Logo" className="w-[180px] py-2" />
-          <p className="text-[12px] font-bold capitalize">{organizationData.address}</p>
+          <img src={logo} alt="Logo" className="w-[120px] py-2" />
+          <p className="text-[12px] font-bold capitalize">{item.address}</p>
           <p className="text-[12px] uppercase">
             <span className="uppercase">cargo</span> - from To
           </p>
@@ -19,11 +20,7 @@ function UserDetails({vender_Data,organizationData,invoice_address}) {
             <div className="w-full flex justify-center pt-3">
               <p className="uppercase text-[15px]">Purchase Order</p>
             </div>
-            <div className="w-full justify-end flex">
-              <h1 className="font-bold text-[12px]">
-                T.No. : <span>126499</span>
-              </h1>
-            </div>
+            
            
           </div>
 
@@ -35,21 +32,21 @@ function UserDetails({vender_Data,organizationData,invoice_address}) {
               <div className="border-r-[1px] border-t-[1px] border-black border-l-[1px] text-[12px]">
                 <div className="border-b-[1px] border-black py-2 px-2 h-[35px]">
                   <span className="font-bold">GSTIN:</span>
-                  <span>{organizationData.GSTIN}</span>
+                  <span>{item.GSTIN}</span>
                 </div>
                 <div className="border-b-[1px] border-black py-2 px-2 h-[35px]">
                   <span className="font-bold">CIN:</span>
-                  <span>{organizationData.CIN}</span>
+                  <span>{item.CIN}</span>
                 </div>
                 <div className="border-b-[1px] border-black py-2 px-2 h-[35px]">
                   <span className="font-bold">PAN No.:</span>
-                  <span>{organizationData.PAN}</span>
+                  <span>{item.PAN}</span>
                 </div>
                 <div className="flex flex-col h-[70px] border-b-[1px] border-black ">
                   <span className="uppercase text-center font-bold py-2">
                     INVOICE Address
                   </span>
-                  <span className="px-2 pb-2">{organizationData.address}</span>
+                  <span className="px-2 pb-2">{item.address}</span>
                 </div>
                 <div className="flex flex-col h-[77px] ">
                   <span className="uppercase text-center font-bold py-2">
@@ -61,7 +58,7 @@ function UserDetails({vender_Data,organizationData,invoice_address}) {
             </div>
           </div>
         </div>
- 
+        )}
     </section>
   );
 }

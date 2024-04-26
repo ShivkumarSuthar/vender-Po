@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/images/images.jpg";
 import { RiEditFill } from "react-icons/ri";
-
+import baseUrl from "../../config";
 function Accounts() {
   const [userData, setUserData] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false); // State to manage edit mode
@@ -11,7 +11,7 @@ function Accounts() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/user/getUserDetails"
+          `${baseUrl}/api/user/getUserDetails`
         );
         setUserData(response.data);
       } catch (error) {
@@ -35,7 +35,7 @@ function Accounts() {
   const handleSubmit = async (index) => {
     try {
       await axios.put(
-        `http://localhost:8000/api/user/updateUserDetails/${userData[index]._id}`,
+        `${baseUrl}/api/user/updateUserDetails/${userData[index]._id}`,
         userData[index]
       );
       setIsEditMode(false);

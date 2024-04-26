@@ -8,13 +8,10 @@ const userDataSchema = new mongoose.Schema({
     password: {
         type: String,
     },
-    userName: {
+    userId: {
         type: String,
     },
-    role: {
-        type: String,
-        default: "user"
-    },
+
     Created_at: {
         type: String,
         default: () => moment().format('DD-MM-YYYY' + " " + 'HH:mm:ss')

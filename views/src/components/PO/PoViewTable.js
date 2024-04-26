@@ -1,7 +1,13 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-function PoViewTable({ POId, vender_id, remark, poData, userData, poItemData }) {
+function PoViewTable({
+  // POId,
+  // vender_id,
+  remark,
+  poData,
+  // userData,
+  poItemData,
+}) {
   const [packingtax, setPackingTax] = useState(0);
   const [Other_Charges, setOther_Charge] = useState(0);
   const [Transportation, seTransportation] = useState(0);
@@ -21,243 +27,235 @@ function PoViewTable({ POId, vender_id, remark, poData, userData, poItemData }) 
       totalAmount += parseInt(item.amount);
     });
     setTotalTaxAmount(totalTax);
-    setGrandTotal(totalAmount + totalTax);
-
+    setGrandTotal(totalAmount);
   }, [poItemData]);
 
   useEffect(() => {
     if (poData) {
-      setPackingTax((poData.packing_Formawading * poData.packing_tax) / 100);
+      setPackingTax((poData.packing_Formawading ? poData.packing_Formawading : 0) + (poData.packing_Formawading * poData.packing_tax) / 100);
       seTransportation(
-        (poData.fright_or_trasnportation * poData.trasnportation_tax) / 100
+        (poData.fright_or_trasnportation ? poData.fright_or_trasnportation : 0) + (poData.fright_or_trasnportation * poData.trasnportation_tax) / 100
       );
-      setOther_Charge((poData.other_charges * poData.others_tax) / 100);
-      setInsurance((poData.insurance * poData.insurance_tax) / 100);
+      setOther_Charge((poData.other_charges ? poData.other_charges : 0) + (poData.other_charges * poData.others_tax) / 100);
+      setInsurance((poData.insurance ? poData.insurance : 0) + (poData.insurance * poData.insurance_tax) / 100);
     }
     setPackingWithTax(
-      parseInt(poData.packing_Formawading) +
-      (parseInt(poData.packing_Formawading) * parseInt(poData.packing_tax)) /
+      parseInt(poData.packing_Formawading ? poData.packing_Formawading : 0) +
+      (parseInt(poData.packing_Formawading ? poData.packing_Formawading : 0) * parseInt(poData.packing_tax ? poData.packing_tax : 0)) /
       100
     );
 
     setOtherWithTax(
-      parseInt(poData.other_charges) +
-      (parseInt(poData.other_charges) * parseInt(poData.others_tax)) / 100
+      parseInt(poData.other_charges ? poData.other_charges : 0) +
+      (parseInt(poData.other_charges ? poData.other_charges : 0) * parseInt(poData.others_tax ? poData.others_tax : 0)) / 100
     );
 
     setInsuranceWithTax(
-      parseInt(poData.insurance) +
-      (parseInt(poData.insurance) * parseInt(poData.insurance_tax)) / 100
+      parseInt(poData.insurance ? poData.insurance : 0) +
+      (parseInt(poData.insurance ? poData.insurance : 0) * parseInt(poData.insurance_tax ? poData.insurance_tax : 0)) / 100
     );
     setTransportationWithTax(
-      parseInt(poData.fright_or_trasnportation) +
-      (parseInt(poData.fright_or_trasnportation) *
-        parseInt(poData.trasnportation_tax)) /
+      parseInt(poData.fright_or_trasnportation ? poData.fright_or_trasnportation : 0) +
+      (parseInt(poData.fright_or_trasnportation ? poData.fright_or_trasnportation : 0) *
+        parseInt(poData.trasnportation_tax ? poData.trasnportation_tax : 0)) /
       100
     );
   }, [poData]);
 
   return (
     <section>
-      <table className="w-full h-full">
-        <thead>
-          <tr className="text-wrap border-[1px] border-black border-t-0">
-            <th className="text-[13px] text-wrap border-r-[1px] border-black py-2">
+      <section className="w-full h-full">
+        <div className="grid row-auto col-auto">
+          <div className="text-wrap border-[1px] border-r-0 font-bold border-black border-t-0 grid grid-rows-1 grid-cols-10 align-middle">
+            <div className="text-[13px] text-wrap border-r-[1px]  border-black flex items-center justify-start px-2">
               Sr. No.
-            </th>
-            <th className="text-[13px] text-wrap border-r-[1px] border-black">
+            </div>
+            <div className="text-[13px] text-wrap  border-r-[1px]  border-black flex items-center justify-center px-2">
               Item Code
-            </th>
-            <th className="text-[13px] text-wrap border-r-[1px] border-black">
+            </div>
+            <div className="text-[13px] text-wrap border-r-[1px] border-black flex items-center justify-center px-2">
               Item Name
-            </th>
-            <th className="text-[13px] text-wrap border-r-[1px] border-black">
+            </div>
+            <div className="text-[13px] text-wrap border-r-[1px] border-black flex items-center text-center px-2">
               Payment Term
-            </th>
-            <th className="text-[13px] text-wrap border-r-[1px] border-black">
+            </div>
+            <div className="text-[13px] text-wrap border-r-[1px] border-black flex items-center justify-center px-2">
               Inco Term
-            </th>
-            <th className="text-[13px] text-wrap ">Delivery Date</th>
-            <th className="text-[13px] text-wrap border-r-[1px] border-l-[1px] border-black">
+            </div>
+            <div className="text-[13px] text-wrap flex justify-center items-center ">
+              Delivery Date
+            </div>
+            <div className="text-[13px] text-wrap text-center border-r-[1px] border-l-[1px] border-black">
               Purchase Qty (PU)
-            </th>
-            <th className="text-[13px] text-wrap border-r-[1px] border-black">
+            </div>
+            <div className="text-[13px] text-wrap border-r-[1px] border-black flex items-center justify-center">
               Basic Price
-            </th>
-            <th className="text-[13px] text-wrap border-r-[1px] border-black">
+            </div>
+            <div className="text-[13px] text-wrap border-r-[1px] border-black flex items-center justify-center">
               TAX
-            </th>
-            <th className="text-[13px] text-wrap border-r-[1px] border-black text-end px-2">
+            </div>
+            <div className="text-[13px] text-wrap border-r-[1px] border-black text-end px-2 flex items-center justify-end">
               Amount
-            </th>
-          </tr>
-        </thead>
-        <tbody>
+            </div>
+          </div>
+        </div>
+
+        <div>
+
+        </div>
+
+        <div>
           {poItemData.map((item, index) => (
-            <tr
+            <div
               key={index}
-              className="border-r-[1px] border-l-[1px] border-b-[1px] border-black"
+              className=" border-l-[1px] border-b-[1px] border-black grid grid-rows-1 grid-cols-10"
             >
-              <td className="text-[12px] text-wrap px-2 py-1 border-r-[1px] border-black">
+              <div className="text-[12px] text-wrap px-2 py-1 border-r-[1px] border-black">
                 {index + 1}
-              </td>
-              <td className="text-[12px] text-wrap text-center px-2 border-r-[1px] border-black">
+              </div>
+              <div className="text-[12px] text-wrap text-center px-2 border-r-[1px] border-black py-1">
                 {item.item_code}
-              </td>
-              <td className="text-[12px] text-wrap text-center px-2 border-r-[1px] border-black">
+              </div>
+              <div className="text-[12px] text-wrap text-center px-2 border-r-[1px] border-black py-1">
                 {item.item_name}
-              </td>
-              <td className="text-[12px] text-center text-wrap px-2 border-r-[1px] border-black">
+              </div>
+              <div className="text-[12px] text-center text-wrap px-2 border-r-[1px] border-black py-1">
                 {item.Payment_Term}
-              </td>
-              <td className="text-[12px] text-wrap px-2 border-r-[1px] border-black text-center">
+              </div>
+              <div className="text-[12px] text-wrap px-2 border-r-[1px] border-black text-center py-1">
                 {item.Inco_Term}
-              </td>
-              <td className="text-[12px] text-wrap px-2 border-r-[1px] border-black text-center">
+              </div>
+              <div className="text-[12px] text-wrap px-2 border-r-[1px] border-black text-center py-1">
                 {item.Delivery_Date}
-              </td>
-              <td className="text-[12px] text-wrap px-2 border-r-[1px] border-black text-center">
+              </div>
+              <div className="text-[12px] text-wrap px-2 border-r-[1px] border-black text-center py-1">
                 {item.Purchase_qty}
-              </td>
-              <td className="text-[12px] text-wrap px-2 border-r-[1px] border-black text-center">
+              </div>
+              <div className="text-[12px] text-wrap px-2 border-r-[1px] border-black text-center py-1">
                 {item.Basic_Price}
-              </td>
-              <td className="text-[12px] text-wrap px-2 border-r-[1px] border-black text-center">
-                {item.tax}%
-              </td>
-              <td className="text-[12px] text-wrap border-r-[1px] border-black text-end px-2">
+              </div>
+              <div className="text-[12px] text-wrap px-2 border-r-[1px] border-black text-center py-1">
+                {item.tax && item.tax + "%"}
+              </div>
+              <div className="text-[12px] text-wrap border-r-[1px] border-black text-end px-2 py-1">
                 {item.amount}
-              </td>
-            </tr>
+              </div>
+            </div>
           ))}
 
-          <tr className="border-l-[1px] border-black">
-            <td
-              colSpan={5}
-              className="border-r-[1px] border-black text-[12px] "
-            >
-              <span className="py-1 px-2 top-0 ">Adjust values</span>
-            </td>
-            <td colSpan={2} className="border-r-[1px] border-black text-[12px]">
-              <tr className="border-b-[1px] border-black w-full flex justify-start px-5">
-                <span className="py-1">Adjust Value</span>
-              </tr>
-              <tr className="border-b-[1px] border-black w-full flex justify-start px-5">
-                <span className="py-1">Packing & Forwading</span>
-              </tr>
-              <tr className="border-b-[1px] border-black w-full flex justify-start px-5">
-                <span className="py-1">Freight/Transportation</span>
-              </tr>
-              <tr className="border-b-[1px] border-black w-full flex justify-start px-5">
-                <span className="py-1">Other Charges</span>
-              </tr>
-              <tr className="w-full flex  justify-start px-5 ">
-                <span className="py-1">Insurance</span>
-              </tr>
-            </td>
-            <td className="border-r-[1px] border-black text-[12px]">
-              <tr className="border-b-[1px] border-black w-full flex justify-center">
-                <span className="py-1">-</span>
-              </tr>
-              <tr className="border-b-[1px] border-black w-full flex justify-center">
-                <span className="py-1">{poData.packing_Formawading}</span>
-              </tr>
-              <tr className="border-b-[1px] border-black w-full flex justify-center">
-                <span className="py-1">{poData.fright_or_trasnportation}</span>
-              </tr>
-              <tr className="border-b-[1px] border-black w-full flex justify-center">
-                <span className="py-1">{poData.other_charges}</span>
-              </tr>
-              <tr className="w-full flex px-2 justify-center ">
-                <span className="py-1">{poData.insurance}</span>
-              </tr>
-            </td>
-            <td className="border-r-[1px] border-black text-[12px]">
-              <tr className="border-b-[1px] border-black w-full flex justify-center">
-                <span className="py-1">-</span>
-              </tr>
-              <tr className="border-b-[1px] border-black w-full flex justify-center">
+          <div className="border-l-[1px] border-black grid grid-rows-1 grid-cols-10">
+            <div className="border-r-[1px] border-black text-[12px] row-span-5 col-span-5">
+              <span className="py-1 px-2 top-0 ">{poData.term_Condition}</span>
+            </div>
+            <div className="border-r-[1px] border-black text-[12px] col-span-2 grid-rows-4 grid">
+              <div className="border-b-[1px] border-black w-full flex justify-start py-1 text-wrap h-[28px]">
+                Packing & Forwading
+              </div>
+              <div className="border-b-[1px] border-black w-full flex justify-start py-1  h-[28px]">
+                Freight/Transportation
+              </div>
+              <div className="border-b-[1px] border-black w-full flex justify-start py-1 h-[28px]">
+                Other Charges
+              </div>
+              <div className="w-full flex  justify-start py-1 h-[28px]">Insurance</div>
+            </div>
+            <div className="border-r-[1px] border-black text-[12px] ">
+              <div className="border-b-[1px] border-black w-full flex justify-center py-1 h-[28px]">
+                {poData.packing_Formawading ? poData.packing_Formawading : 0}
+              </div>
+              <div className="border-b-[1px] border-black w-full flex justify-center h-[28px]">
+                <span className="py-1">{poData.fright_or_trasnportation ? poData.fright_or_trasnportation : 0}</span>
+              </div>
+              <div className="border-b-[1px] border-black w-full flex justify-center h-[28px]">
+                <span className="py-1">{poData.other_charges ? poData.other_charges : 0}</span>
+              </div>
+              <div className="w-full flex px-2 justify-center h-[28px]">
+                <span className="py-1">{poData.insurance ? poData.insurance : 0}</span>
+              </div>
+            </div>
+            <div className="border-r-[1px] border-black text-[12px]">
+              <div className="border-b-[1px] border-black w-full flex justify-center h-[28px]">
                 <span className="py-1">{poData.packing_tax}%</span>
-              </tr>
-              <tr className="border-b-[1px] border-black w-full flex justify-center">
+              </div>
+              <div className="border-b-[1px] border-black w-full flex justify-center h-[28px]">
                 <span className="py-1">{poData.trasnportation_tax}%</span>
-              </tr>
-              <tr className="border-b-[1px] border-black w-full flex justify-center">
+              </div>
+              <div className="border-b-[1px] border-black w-full flex justify-center h-[28px]">
                 <span className="py-1">{poData.others_tax}%</span>
-              </tr>
-              <tr className="w-full flex px-2 justify-center ">
+              </div>
+              <div className="w-full flex px-2 justify-center h-[28px] ">
                 <span className="py-1">{poData.insurance_tax}%</span>
-              </tr>
-            </td>
-            <td className="border-r-[1px] border-black text-[12px]">
-              <tr className="border-b-[1px] border-black w-full flex justify-end px-2">
-                <span className="py-1">-</span>
-              </tr>
-              <tr className="border-b-[1px] border-black w-full flex justify-end px-2">
+              </div>
+            </div>
+            <div className="border-r-[1px] border-black text-[12px]">
+
+              <div className="border-b-[1px] border-black w-full flex justify-end px-2 h-[28px]">
                 <span className="py-1">{PackingWithTax.toFixed(2)}</span>
-              </tr>
-              <tr className="border-b-[1px] border-black w-full flex justify-end px-2">
+              </div>
+              <div className="border-b-[1px] border-black w-full flex justify-end px-2 h-[28px]">
                 <span className="py-1">{TransportationWithTax.toFixed(2)}</span>
-              </tr>
-              <tr className="border-b-[1px] border-black w-full flex justify-end px-2">
+              </div>
+              <div className="border-b-[1px] border-black w-full flex justify-end px-2 h-[28px]">
                 <span className="py-1">{OtherWithTax.toFixed(2)}</span>
-              </tr>
-              <tr className="w-full flex px-2 justify-end">
+              </div>
+              <div className="w-full flex px-2 justify-end h-[28px]">
                 <span className="py-1">{InsuranceWithTax.toFixed(2)}</span>
-              </tr>
-            </td>
-          </tr>
-          <tr>
-            <td
-              colSpan={9}
-              className="border-r-[1px] border-t-[1px] border-l-[1px] border-black text-[12px]"
-            >
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-rows-1 grid-cols-10">
+            <div className="border-r-[1px] border-t-[1px] border-l-[1px] border-black text-[12px] col-span-9">
               <div className="flex flex-col items-end">
                 <span className="py-1 px-2 font-bold">Tax Total Amount :</span>
               </div>
-            </td>
-            <td
+            </div>
+            <div
               colSpan={1}
               className="border-t-[1px] border-r-[1px] border-black text-[12px] text-end px-2"
             >
-              {(
-                totalTaxAmount +
-                packingtax +
-                Other_Charges +
-                Transportation +
-                Insurance
-              ).toFixed(2)}
-            </td>
-          </tr>
-          <tr>
-            <td
-              colSpan={9}
-              className="border-r-[1px] border-t-[1px] border-l-[1px] border-black text-[12px]"
-            >
-              <div className="flex flex-col items-end">
-                <span className="py-1 px-2 font-bold">Grand Total Amount :</span>
+              <div>
+                
+                  {(
+                    (totalTaxAmount ?? 0) +
+                    (packingtax ?? 0) +
+                    (Other_Charges ?? 0) +
+                    (Transportation ?? 0) +
+                    (Insurance ?? 0)
+                  )} 
+               
+
               </div>
-            </td>
-            <td
+
+            </div>
+          </div>
+          <div className="grid grid-rows-1 grid-cols-10">
+            <div className="border-r-[1px] border-t-[1px] border-l-[1px] border-black text-[12px] col-span-9">
+              <div className="flex flex-col items-end">
+                <span className="py-1 px-2 font-bold">
+                  Grand Total Amount :
+                </span>
+              </div>
+            </div>
+            <div
               colSpan={1}
               className="border-t-[1px] border-r-[1px] border-black text-[12px] px-2 text-end"
             >
-              {((grandTotal +
+              {(
+                grandTotal +
                 InsuranceWithTax +
                 PackingWithTax +
                 TransportationWithTax +
-                OtherWithTax) +
-                (
-                  totalTaxAmount +
+                OtherWithTax +
+                (totalTaxAmount +
                   packingtax +
                   Other_Charges +
                   Transportation +
-                  Insurance
-                )).toFixed(2)}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                  Insurance)
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
       <section>
         <div className="border-[1px] border-black px-5 py-2">
           <div>
@@ -267,41 +265,38 @@ function PoViewTable({ POId, vender_id, remark, poData, userData, poItemData }) 
         </div>
 
         <div className="flex w-full justify-center border-t-0 border-[1px] border-black border-r-[1px]">
-          <div className="flex flex-col border-r-[1px] border-black px-10 items-center w-[25%] py-3">
+          <div className="flex flex-col border-r-[1px] border-black px-2 items-center w-[25%] py-2">
             <span className="font-bold text-[14px]">Created Buyer</span>
-            <span className="text-[12px] pt-5">{poData.createdBy}</span>
-            <span className="text-[12px]">
-              {poData.created_at}
-            </span>
+            <span className="text-[10px] pt-5">{poData.createdBy}</span>
+            <span className="text-[10px]">{poData.created_at}</span>
           </div>
 
-          <div className="flex flex-col border-r-[1px] border-black px-10 items-center w-[25%] py-2">
+          <div className="flex flex-col border-r-[1px] border-black px-2 items-center w-[25%] py-2">
             <span className="font-bold text-[14px] ">Checked By</span>
-            <span className="text-[12px] pt-5">{poData.UppdatedBybuyer}</span>
-            <span className="text-[12px]">
-              {poData.buyyer_status_update_at}
-            </span>
+            <span className="text-[10px] pt-5">{poData.createdBy}</span>
+            <span className="text-[10px]">{poData.created_at}</span>
+
           </div>
 
-          <div className="flex flex-col border-r-[1px] border-black px-10 items-center w-[25%] py-2">
+          <div className="flex flex-col border-r-[1px] border-black px-2 items-center w-[25%] py-2">
             <span className="font-bold text-[14px]">HOD MM</span>
-            <span className="text-[12px] pt-5">{poData.UppdatedByHOD}</span>
-            <span className="text-[12px]">{poData.HOD_status_update_at}</span>
+            <span className="text-[10px] pt-5">{poData.UppdatedByHOD}</span>
+            <span className="text-[10px]">{poData.HOD_status_update_at}</span>
           </div>
 
-          <div className="flex flex-col border-r-[1px] border-black px-10 items-center w-[25%] py-2">
+          <div className="flex flex-col border-r-[1px] border-black px-2 items-center w-[25%] py-2">
             <span className="font-bold text-[14px]">Final Approval</span>
-            <span className="text-[12px] pt-5">{poData.UppdatedByMD}</span>
-            <span className="text-[12px]">{poData.Final_Approved_at}</span>
+            <span className="text-[10px] pt-5">{poData.UppdatedByMD}</span>
+            <span className="text-[10px]">{poData.Final_Approved_at}</span>
           </div>
 
           <div className="flex flex-col w-[25%] items-center py-2">
             <span className="font-bold text-[14px]">current Status</span>
-            <span className="text-[12px] py-2">{poData.PO_status}</span>
+            <span className="text-[10px] py-2">{poData.PO_status}</span>
           </div>
         </div>
       </section>
-    </section >
+    </section>
   );
 }
 
